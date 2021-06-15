@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:clean_architecture_tdd_course/core/errors/exceptions.dart';
 import 'package:clean_architecture_tdd_course/features/number_trivia/data/datasources/number_trivia_local_datasource.dart';
@@ -16,16 +15,15 @@ void main() {
   late NumberTriviaLocalDatasourceImpl datasource;
   late MockSharedPreferences mockSharedPreferences;
 
+  final json = fixture('trivia_cached.json');
+  final tNumberTriviaModel = NumberTriviaModel.fromJson(jsonDecode(json));
+
   setUp(() {
     mockSharedPreferences = MockSharedPreferences();
-    datasource =
-        NumberTriviaLocalDatasourceImpl(sharedPreferences: mockSharedPreferences);
+    datasource = NumberTriviaLocalDatasourceImpl(preferences: mockSharedPreferences);
   });
 
   group('getLastNumberTrivia', () {
-    final json = fixture('trivia_cached.json');
-    final tNumberTriviaModel = NumberTriviaModel.fromJson(jsonDecode(json));
-
     test(
         'should return NumberTrivia from sharedPreferences when there is one in the cache',
         () async {
@@ -45,6 +43,22 @@ void main() {
       final call = datasource.getLastNumberTrivia;
       //assert
       expect(() => call(), throwsA(TypeMatcher<CacheException>()));
+    });
+  });
+
+  group('cacheNumberTrivia', () {
+    final tNumberTriviaModel = NumberTriviaModel(number: 1, text: 'test trivia');
+
+    test('should call SharedPreferences to cache the data', () async {
+      // act
+      await datasource.cacheNumberTrivia(tNumberTriviaModel);
+      // assert
+      verify(
+        () => mockSharedPreferences.setString(
+          CACHED_NUMBER_TRIVIA,
+          jsonEncode(tNumberTriviaModel.toJson()),
+        ),
+      ).called(1);
     });
   });
 }

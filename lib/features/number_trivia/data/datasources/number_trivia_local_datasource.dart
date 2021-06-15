@@ -17,16 +17,22 @@ abstract class NumberTriviaLocalDatasource {
 const CACHED_NUMBER_TRIVIA = 'CACHED_NUMBER_TRIVIA';
 
 class NumberTriviaLocalDatasourceImpl implements NumberTriviaLocalDatasource {
-  final SharedPreferences sharedPreferences;
+  final SharedPreferences preferences;
 
-  NumberTriviaLocalDatasourceImpl({required this.sharedPreferences});
+  NumberTriviaLocalDatasourceImpl({required this.preferences});
 
   @override
-  void cacheNumberTrivia(NumberTriviaModel triviaToCache) {}
+  Future<void> cacheNumberTrivia(NumberTriviaModel triviaToCache) async {
+    final value = jsonEncode(triviaToCache.toJson());
+    await preferences.setString(
+      CACHED_NUMBER_TRIVIA,
+      value,
+    );
+  }
 
   @override
   Future<NumberTriviaModel> getLastNumberTrivia() {
-    final jsonString = sharedPreferences.getString(CACHED_NUMBER_TRIVIA);
+    final jsonString = preferences.getString(CACHED_NUMBER_TRIVIA);
     if (jsonString != null) {
       return Future.value(NumberTriviaModel.fromJson(jsonDecode(jsonString)));
     } else {
