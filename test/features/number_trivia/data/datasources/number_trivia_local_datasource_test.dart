@@ -52,7 +52,8 @@ void main() {
 
     test('should call SharedPreferences to cache the data', () async {
       // act
-      await datasource.cacheNumberTrivia(tNumberTriviaModel);
+      datasource.cacheNumberTrivia(tNumberTriviaModel);
+      await untilCalled(() => mockSharedPreferences.setString(any(), any()));
       // assert
       verify(
         () => mockSharedPreferences.setString(
