@@ -114,7 +114,7 @@ void main() {
         //assert
         verify(() => mockRemoteDatasource.getConcreteNumberTrivia(tNumber));
         verifyZeroInteractions(mockLocalDatasource);
-        expect(result, equals(Left(ServerFailure([]))));
+        expect(result, equals(Left(ServerFailure())));
       });
     });
 
@@ -143,7 +143,7 @@ void main() {
         //assert
         verify(() => mockLocalDatasource.getLastNumberTrivia());
         verifyZeroInteractions(mockRemoteDatasource);
-        expect(result, equals(Left(CacheFailure([]))));
+        expect(result, equals(Left(CacheFailure())));
       });
     });
   });
@@ -206,7 +206,7 @@ void main() {
         //assert
         verify(() => mockRemoteDatasource.getRandomNumberTrivia());
         verifyZeroInteractions(mockLocalDatasource);
-        expect(result, equals(Left(ServerFailure([]))));
+        expect(result, equals(Left(ServerFailure())));
       });
     });
 
@@ -235,7 +235,7 @@ void main() {
         //assert
         verify(() => mockLocalDatasource.getLastNumberTrivia());
         verifyZeroInteractions(mockRemoteDatasource);
-        expect(result, equals(Left(CacheFailure([]))));
+        expect(result, equals(Left(CacheFailure())));
       });
     });
   });

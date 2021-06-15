@@ -11,9 +11,13 @@ abstract class Failure extends Equatable {
 
 //General failures
 class ServerFailure extends Failure {
-  ServerFailure(List<Object> properties) : super(properties);
+  ServerFailure() : super([]);
 }
 
 class CacheFailure extends Failure {
-  CacheFailure(List<Object> properties) : super(properties);
+  CacheFailure() : super([]);
+}
+
+class InvalidInputFailure extends Failure {
+  InvalidInputFailure() : super([]);
 }
